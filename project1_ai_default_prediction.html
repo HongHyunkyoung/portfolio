@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Project 01 · AI 기반 기업 부도 예측</title>
+<style>
+    :root {
+      --bg: #0b1020;
+      --bg-soft: #131a2e;
+      --panel: rgba(18, 25, 47, 0.92);
+      --panel-2: rgba(26, 35, 61, 0.92);
+      --line: rgba(255,255,255,0.08);
+      --text: #eef2ff;
+      --muted: #aab4d6;
+      --subtle: #7f8bb3;
+      --brand: #7c9cff;
+      --brand-2: #59d0ff;
+      --good: #2dd4bf;
+      --warn: #fbbf24;
+      --danger: #fb7185;
+      --violet: #a78bfa;
+      --shadow: 0 24px 60px rgba(0,0,0,0.38);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --max: 1240px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(89,208,255,0.16), transparent 28%),
+        radial-gradient(circle at 82% 18%, rgba(124,156,255,0.18), transparent 26%),
+        radial-gradient(circle at 50% 100%, rgba(167,139,250,0.16), transparent 34%),
+        linear-gradient(180deg, #090d1a 0%, #0b1020 46%, #0a1022 100%);
+      color: var(--text);
+      font-family: Inter, Pretendard, "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.65;
+      letter-spacing: -0.01em;
+    }
+
+    a { color: #9edbff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .project-section {
+      position: relative;
+      overflow: hidden;
+      padding: 72px 24px 96px;
+    }
+
+    .project-section::before,
+    .project-section::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(70px);
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .project-section::before {
+      width: 280px; height: 280px;
+      background: rgba(89, 208, 255, 0.30);
+      top: -40px; left: -80px;
+    }
+
+    .project-section::after {
+      width: 360px; height: 360px;
+      background: rgba(167, 139, 250, 0.24);
+      right: -120px; bottom: -120px;
+    }
+
+    .container {
+      width: min(var(--max), 100%);
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(124,156,255,0.22);
+      background: rgba(124,156,255,0.10);
+      color: #dbe5ff;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 28px;
+      align-items: stretch;
+      margin-top: 18px;
+    }
+
+    .hero-main,
+    .hero-side,
+    .card,
+    .panel {
+      background: linear-gradient(180deg, rgba(20,29,54,0.94), rgba(13,19,38,0.96));
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero-main {
+      padding: 34px 34px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-main::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(124,156,255,0.18), transparent 46%, rgba(89,208,255,0.10));
+      pointer-events: none;
+    }
+
+    .hero-title {
+      position: relative;
+      z-index: 1;
+      margin: 16px 0 14px;
+      font-size: clamp(32px, 4.7vw, 60px);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-title .accent { color: #b7c8ff; }
+    .hero-desc {
+      position: relative;
+      z-index: 1;
+      max-width: 860px;
+      margin: 0 0 26px;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .meta-pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #d9e2ff;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .hero-side {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .hero-side h3,
+    .section-head h2 {
+      margin: 0 0 10px;
+      font-size: 22px;
+      letter-spacing: -0.03em;
+    }
+
+    .hero-side p,
+    .section-head p,
+    .body-copy,
+    .note,
+    .caption {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .big-kpi {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 14px;
+    }
+
+    .mini-stat {
+      padding: 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .mini-stat .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--subtle);
+      margin-bottom: 8px;
+    }
+
+    .mini-stat .value {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .mini-stat .sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .metrics-grid {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0,1fr));
+      gap: 16px;
+    }
+
+    .metric-card {
+      padding: 22px 18px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(20,29,54,0.92), rgba(12,18,35,0.96));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: var(--shadow);
+      min-height: 156px;
+    }
+
+    .metric-card .metric-label {
+      color: var(--subtle);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+
+    .metric-card .metric-value {
+      font-size: clamp(28px, 2.6vw, 40px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      margin-bottom: 8px;
+    }
+
+    .metric-card .metric-text {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .metric-card.brand { background: linear-gradient(180deg, rgba(37,56,110,0.90), rgba(17,26,49,0.96)); }
+    .metric-card.good { background: linear-gradient(180deg, rgba(18,74,70,0.88), rgba(11,31,36,0.96)); }
+    .metric-card.warn { background: linear-gradient(180deg, rgba(86,63,13,0.90), rgba(33,24,8,0.96)); }
+    .metric-card.violet { background: linear-gradient(180deg, rgba(61,39,109,0.90), rgba(24,17,43,0.96)); }
+    .metric-card.red { background: linear-gradient(180deg, rgba(95,34,46,0.90), rgba(31,13,18,0.96)); }
+
+    .section {
+      margin-top: 28px;
+      padding: 32px;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(180deg, rgba(17,24,43,0.92), rgba(10,16,31,0.96));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: end;
+      margin-bottom: 24px;
+    }
+
+    .section-kicker {
+      display: inline-block;
+      margin-bottom: 10px;
+      color: #95b6ff;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.10em;
+      font-weight: 800;
+    }
+
+    .two-col,
+    .three-col,
+    .four-col {
+      display: grid;
+      gap: 18px;
+    }
+
+    .two-col { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .three-col { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .four-col { grid-template-columns: repeat(4, minmax(0,1fr)); }
+
+    .card {
+      padding: 22px;
+      border-radius: 22px;
+    }
+
+    .card h3, .card h4 {
+      margin: 0 0 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .card ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .card li + li { margin-top: 8px; }
+
+    .role-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .role-item {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .role-item strong {
+      display: block;
+      margin-bottom: 6px;
+      color: #f4f7ff;
+    }
+
+    .pipeline-wrap {
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .pipeline {
+      min-width: 1060px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .step {
+      position: relative;
+      padding: 22px 20px 20px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(22,31,56,0.95), rgba(12,17,32,0.98));
+      border: 1px solid rgba(255,255,255,0.08);
+      min-height: 230px;
+    }
+
+    .step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      top: 50%; right: -14px;
+      transform: translateY(-50%);
+      width: 28px; height: 28px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: #1f2a4b;
+      border: 1px solid rgba(255,255,255,0.10);
+      color: #dbe5ff;
+      font-weight: 900;
+      box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+      z-index: 2;
+    }
+
+    .step-index {
+      width: 42px; height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(124,156,255,0.28), rgba(89,208,255,0.20));
+      border: 1px solid rgba(124,156,255,0.25);
+      font-weight: 800;
+      margin-bottom: 16px;
+    }
+
+    .step h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+
+    .step p { margin: 0 0 12px; color: var(--muted); font-size: 14px; }
+    .step ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
+
+    .decision-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .decision {
+      padding: 18px 18px 18px 22px;
+      border-left: 3px solid var(--brand);
+      border-radius: 16px;
+      background: rgba(255,255,255,0.03);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-right: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .decision strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 16px;
+    }
+
+    .badge-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #e8eeff;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .badge::before {
+      content: "";
+      width: 8px; height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      box-shadow: 0 0 14px rgba(89,208,255,0.55);
+    }
+
+    .traffic-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 18px;
+    }
+
+    .traffic-card {
+      padding: 24px;
+      border-radius: 26px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .traffic-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: 0.15;
+      pointer-events: none;
+    }
+
+    .traffic-card.red::before { background: linear-gradient(180deg, #fb7185, transparent 70%); }
+    .traffic-card.yellow::before { background: linear-gradient(180deg, #fbbf24, transparent 70%); }
+    .traffic-card.green::before { background: linear-gradient(180deg, #34d399, transparent 70%); }
+
+    .traffic-light {
+      width: 18px; height: 18px; border-radius: 999px; margin-bottom: 14px;
+      box-shadow: 0 0 18px rgba(255,255,255,0.18);
+    }
+    .traffic-card.red .traffic-light { background: #ef4444; }
+    .traffic-card.yellow .traffic-light { background: #f59e0b; }
+    .traffic-card.green .traffic-light { background: #10b981; }
+
+    .traffic-card h3 { margin: 0 0 8px; font-size: 22px; }
+    .traffic-rate {
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      margin-bottom: 8px;
+    }
+
+    .traffic-meta {
+      color: var(--muted);
+      font-size: 14px;
+      margin-bottom: 14px;
+    }
+
+    .traffic-card ul { margin: 0; padding-left: 18px; color: var(--muted); }
+
+    .shap-card {
+      padding: 24px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(20,29,54,0.94), rgba(11,16,31,0.98));
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+.shap-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+.shap-item {
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+
+.rank {
+      width: 36px; height: 36px; border-radius: 13px;
+      display: grid; place-items: center;
+      background: linear-gradient(135deg, rgba(124,156,255,0.24), rgba(89,208,255,0.18));
+      font-weight: 800;
+      color: #eaf1ff;
+    }
+
+    .shap-title {
+      font-weight: 800;
+      margin-bottom: 3px;
+    }
+
+.shap-desc {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+.trend-chip {
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border: 1px solid rgba(255,255,255,0.10);
+      white-space: nowrap;
+    }
+
+    .trend-up { color: #ffd9df; background: rgba(251,113,133,0.14); }
+    .trend-down { color: #d4fff4; background: rgba(45,212,191,0.14); }
+
+    .evidence-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .evidence-item {
+      padding: 15px 16px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      color: var(--muted);
+    }
+
+    .evidence-item strong { color: var(--text); }
+
+    .footer-source {
+      margin-top: 26px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      color: var(--subtle);
+      font-size: 13px;
+    }
+
+    .source-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .source-links a {
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      color: #cfe7ff;
+      font-size: 13px;
+    }
+
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .chart-card {
+      grid-column: span 6;
+      padding: 24px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(20,29,54,0.94), rgba(11,16,31,0.98));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: var(--shadow);
+      min-height: 380px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chart-card.wide { grid-column: span 12; min-height: 420px; }
+    .chart-card.tall { min-height: 460px; }
+
+    .chart-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: start;
+      margin-bottom: 18px;
+    }
+
+    .chart-head h3 {
+      margin: 0 0 6px;
+      font-size: 20px;
+      letter-spacing: -0.03em;
+    }
+
+    .chart-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .chart-chip {
+      white-space: nowrap;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(124,156,255,0.12);
+      border: 1px solid rgba(124,156,255,0.18);
+      color: #dbe5ff;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .chart-wrap {
+      position: relative;
+      flex: 1;
+      min-height: 280px;
+    }
+
+    .chart-wrap.tall { min-height: 360px; }
+
+    .chart-footnote {
+      margin-top: 14px;
+      color: var(--subtle);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .stack-col {
+      display: grid;
+      gap: 18px;
+    }
+
+    @media (max-width: 1180px) {
+      .chart-card,
+      .chart-card.wide { grid-column: span 12; }
+      .chart-card { min-height: 360px; }
+      .metrics-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .metrics-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .four-col { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .hero { grid-template-columns: 1fr; }
+      .three-col { grid-template-columns: 1fr; }
+      .two-col { grid-template-columns: 1fr; }
+      .traffic-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 760px) {
+      .project-section { padding: 48px 16px 72px; }
+      .hero-main, .hero-side, .section { padding: 22px; }
+      .metrics-grid { grid-template-columns: 1fr 1fr; }
+      .metric-card { min-height: auto; }
+      .big-kpi { grid-template-columns: 1fr; }
+      .section-head { flex-direction: column; align-items: start; }
+      .four-col { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 520px) {
+      .metrics-grid { grid-template-columns: 1fr; }
+      .shap-item { grid-template-columns: 44px 1fr; }
+      .shap-item .trend-chip { grid-column: 1 / -1; justify-self: start; }
+    }
+  </style>
+<style>
+
+:root {
+  --bg: #0b1020;
+  --bg-soft: #131a2e;
+  --panel: rgba(18, 25, 47, 0.92);
+  --panel-2: rgba(26, 35, 61, 0.92);
+  --line: rgba(255,255,255,0.08);
+  --text: #eef2ff;
+  --muted: #aab4d6;
+  --subtle: #7f8bb3;
+  --brand: #7c9cff;
+  --brand-2: #59d0ff;
+  --good: #2dd4bf;
+  --warn: #fbbf24;
+  --danger: #fb7185;
+  --violet: #a78bfa;
+  --shadow: 0 24px 60px rgba(0,0,0,0.38);
+  --radius-xl: 28px;
+  --radius-lg: 20px;
+  --radius-md: 16px;
+  --max: 1240px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background:
+    radial-gradient(circle at 10% 12%, rgba(89,208,255,0.14), transparent 24%),
+    radial-gradient(circle at 88% 10%, rgba(124,156,255,0.16), transparent 24%),
+    linear-gradient(180deg, #f7f4ee 0%, #f1ede6 100%) !important;
+  color: var(--text);
+  font-family: Inter, Pretendard, "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.68;
+  letter-spacing: -0.01em;
+  padding: 28px 0 72px;
+}
+a { color: #9edbff; text-decoration: none; }
+a:hover { text-decoration: underline; }
+.project-section {
+  position: relative;
+  overflow: hidden;
+  padding: 0 0 30px !important;
+}
+.project-section::before,
+.project-section::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(70px);
+  opacity: 0.42;
+  pointer-events: none;
+}
+.project-section::before {
+  width: 280px; height: 280px;
+  background: rgba(89, 208, 255, 0.24);
+  top: -40px; left: -80px;
+}
+.project-section::after {
+  width: 360px; height: 360px;
+  background: rgba(167, 139, 250, 0.20);
+  right: -120px; bottom: -120px;
+}
+.container {
+  width: min(var(--max), calc(100% - 40px)) !important;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(124,156,255,0.22);
+  background: rgba(255,255,255,0.76);
+  color: #3559e0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 30px rgba(53,89,224,0.08);
+}
+.hero {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 28px;
+  align-items: stretch;
+  margin-top: 18px;
+  margin-bottom: 28px;
+}
+.hero-main,
+.hero-side,
+.card,
+.panel,
+.chart-card,
+.section,
+.footer {
+  background: linear-gradient(180deg, rgba(20,29,54,0.94), rgba(13,19,38,0.96)) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-xl) !important;
+  box-shadow: var(--shadow) !important;
+  backdrop-filter: blur(12px);
+}
+.hero-main {
+  padding: 34px 34px 28px !important;
+  position: relative;
+  overflow: hidden;
+}
+.hero-main::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(124,156,255,0.18), transparent 46%, rgba(89,208,255,0.10));
+  pointer-events: none;
+}
+.hero-main > * { position: relative; z-index: 1; }
+.hero-title {
+  margin: 16px 0 14px;
+  font-size: clamp(32px, 4.7vw, 60px) !important;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
+}
+.hero-title .accent,
+.hero-title span { color: #b7c8ff !important; }
+.hero-desc {
+  max-width: 860px;
+  margin: 0 0 26px;
+  color: var(--muted) !important;
+  font-size: 17px !important;
+}
+.meta-row,
+.hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 0;
+}
+.meta-pill,
+.hero-tag {
+  padding: 10px 14px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  color: #d9e2ff !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+.hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+.hero-links a {
+  padding: 9px 12px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  background: rgba(255,255,255,0.04) !important;
+  color: #cfe7ff !important;
+  font-size: 13px !important;
+}
+.hero-side {
+  padding: 28px !important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 18px;
+}
+.hero-side .metrics-grid {
+  margin-top: 0 !important;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 14px !important;
+}
+.metric-card {
+  padding: 22px 18px !important;
+  border-radius: 22px !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  box-shadow: none !important;
+  min-height: 156px;
+  background: linear-gradient(180deg, rgba(20,29,54,0.92), rgba(12,18,35,0.96)) !important;
+}
+.metric-card .metric-label {
+  color: var(--subtle) !important;
+  font-size: 12px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 10px;
+}
+.metric-card .metric-value {
+  font-size: clamp(28px, 2.6vw, 40px) !important;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  margin-bottom: 8px;
+}
+.metric-card .metric-text {
+  color: var(--muted) !important;
+  font-size: 14px !important;
+  line-height: 1.5;
+}
+.metric-card.brand,
+.metric-card.purple { background: linear-gradient(180deg, rgba(61,39,109,0.90), rgba(24,17,43,0.96)) !important; }
+.metric-card.good,
+.metric-card.teal,
+.metric-card.green { background: linear-gradient(180deg, rgba(18,74,70,0.88), rgba(11,31,36,0.96)) !important; }
+.metric-card.warn,
+.metric-card.yellow { background: linear-gradient(180deg, rgba(86,63,13,0.90), rgba(33,24,8,0.96)) !important; }
+.metric-card.red,
+.metric-card.pink { background: linear-gradient(180deg, rgba(95,34,46,0.90), rgba(31,13,18,0.96)) !important; }
+.section {
+  margin-top: 0 !important;
+  margin-bottom: 28px;
+  padding: 32px !important;
+}
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: end;
+  margin-bottom: 24px;
+}
+.section-kicker {
+  display: inline-block;
+  margin-bottom: 10px;
+  color: #95b6ff !important;
+  font-size: 12px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.10em !important;
+  font-weight: 800 !important;
+}
+.section-head h2 {
+  margin: 0 0 10px;
+  font-size: 22px !important;
+  letter-spacing: -0.03em;
+}
+.section-head p,
+.body-copy,
+.note,
+.caption,
+.card p,
+.card li,
+.evidence-item,
+.day-content,
+.footer-source,
+.agent-desc,
+.chart-footnote,
+.chart-head p,
+.step p {
+  color: var(--muted) !important;
+}
+.two-col, .three-col, .four-col {
+  display: grid;
+  gap: 18px !important;
+}
+.two-col { grid-template-columns: repeat(2, minmax(0,1fr)); }
+.wide-left-layout { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); }
+.role-layout { grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); }
+.shap-layout { grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr); }
+.three-col { grid-template-columns: repeat(3, minmax(0,1fr)); }
+.four-col { grid-template-columns: repeat(4, minmax(0,1fr)); }
+.two-col > *,
+.three-col > *,
+.four-col > * {
+  min-width: 0;
+}
+.card {
+  padding: 22px !important;
+  border-radius: 22px !important;
+}
+.card h3, .card h4 {
+  margin: 0 0 12px;
+  letter-spacing: -0.02em;
+}
+.card ul { margin: 0; padding-left: 18px; }
+.card li + li { margin-top: 8px; }
+.compact-left-panel > .card:first-child {
+  padding: 18px 20px !important;
+}
+.compact-left-panel > .card:first-child .body-copy {
+  line-height: 1.55;
+}
+.compact-left-panel > .card:first-child .evidence-list,
+.compact-left-panel > .card:first-child .role-list {
+  gap: 10px !important;
+  margin-top: 12px !important;
+}
+.compact-left-panel > .card:first-child .evidence-item,
+.compact-left-panel > .card:first-child .role-item {
+  padding: 12px 16px !important;
+}
+.compact-left-panel > .card:first-child .role-item strong {
+  margin-bottom: 6px;
+}
+.role-list,
+.evidence-list,
+.decision-list,
+.day-timeline { display: grid !important; gap: 14px !important; }
+.role-item,
+.evidence-item,
+.decision,
+.guardrail-item {
+  padding: 16px 18px !important;
+  border-radius: 18px !important;
+  background: rgba(255,255,255,0.04) !important;
+  border: 1px solid rgba(255,255,255,0.06) !important;
+}
+.role-item {
+  color: var(--muted) !important;
+  font-weight: 400 !important;
+  word-break: keep-all;
+  overflow-wrap: normal;
+}
+.role-item strong,
+.decision strong,
+.evidence-item strong,
+.agent-name,
+.day-content strong { color: #f4f7ff !important; }
+.role-item strong {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 800 !important;
+}
+.pipeline-wrap { overflow-x: auto; padding-bottom: 2px; }
+.pipeline {
+  min-width: 1060px;
+  display: grid !important;
+  grid-template-columns: repeat(var(--pipeline-cols, 5), 1fr);
+  gap: 16px !important;
+  align-items: stretch !important;
+}
+.step {
+  position: relative;
+  padding: 22px 20px 20px !important;
+  border-radius: 24px !important;
+  background: linear-gradient(180deg, rgba(22,31,56,0.95), rgba(12,17,32,0.98)) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  min-height: 230px;
+}
+.step:not(:last-child)::after {
+  content: "→";
+  position: absolute;
+  top: 50%; right: -14px;
+  transform: translateY(-50%);
+  width: 28px; height: 28px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: #1f2a4b;
+  border: 1px solid rgba(255,255,255,0.10);
+  color: #dbe5ff;
+  font-weight: 900;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+  z-index: 2;
+}
+.step-index {
+  width: 42px; height: 42px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, rgba(124,156,255,0.28), rgba(89,208,255,0.20));
+  border: 1px solid rgba(124,156,255,0.25);
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+.step h3 { margin: 0 0 10px; font-size: 20px !important; }
+.step p { margin: 0 0 12px; font-size: 14px !important; }
+.step h3,
+.step p,
+.step li {
+  word-break: keep-all;
+  overflow-wrap: normal;
+}
+.step {
+  overflow-wrap: break-word;
+}
+.text-preserve {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+.chart-grid {
+  display: grid !important;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 18px !important;
+}
+.chart-card {
+  grid-column: span 6;
+  padding: 24px !important;
+  border-radius: 24px !important;
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  min-width: 0;
+  overflow: hidden;
+}
+.chart-card.wide { grid-column: span 12; min-height: 420px; }
+.chart-card.tall { min-height: 460px; }
+.chart-card.performance-chart {
+  min-height: 340px !important;
+}
+.chart-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: start;
+  margin-bottom: 18px;
+}
+.chart-head h3 { margin: 0 0 6px; font-size: 20px !important; letter-spacing: -0.03em; }
+.chart-chip {
+  white-space: nowrap;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(124,156,255,0.12);
+  border: 1px solid rgba(124,156,255,0.18);
+  color: #dbe5ff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.chart-wrap { position: relative; flex: 1; min-height: 280px; max-width: 100%; min-width: 0; }
+.chart-wrap.tall { min-height: 360px; }
+.performance-chart .chart-wrap.tall {
+  min-height: 260px !important;
+}
+.chart-wrap canvas {
+  max-width: 100% !important;
+}
+.badge-wrap, .source-links { display: flex; flex-wrap: wrap; gap: 10px !important; }
+.badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 14px !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  color: #e8eeff;
+  font-size: 14px !important;
+  font-weight: 700 !important;
+}
+.badge::before {
+  content: "";
+  width: 8px; height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--brand), var(--brand-2));
+  box-shadow: 0 0 14px rgba(89,208,255,0.55);
+}
+.source-links a {
+  padding: 9px 12px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  background: rgba(255,255,255,0.04) !important;
+  color: #cfe7ff !important;
+  font-size: 13px !important;
+}
+.footer {
+  margin-top: 20px;
+  padding: 26px 28px !important;
+}
+.footer-source {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  border-top: 0 !important;
+  font-size: 13px !important;
+}
+@media (max-width: 1180px) {
+  .chart-card, .chart-card.wide { grid-column: span 12; }
+  .chart-card { min-height: 360px; }
+  .four-col { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .hero { grid-template-columns: 1fr; }
+  .three-col, .two-col { grid-template-columns: 1fr; }
+}
+@media (max-width: 760px) {
+  body { padding: 14px 0 52px; }
+  .container { width: min(var(--max), calc(100% - 24px)) !important; }
+  .hero-main, .hero-side, .section { padding: 22px !important; }
+  .metrics-grid, .hero-side .metrics-grid { grid-template-columns: 1fr 1fr !important; }
+  .metric-card { min-height: auto; }
+  .section-head { flex-direction: column; align-items: start; }
+  .four-col { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  .metrics-grid, .hero-side .metrics-grid { grid-template-columns: 1fr !important; }
+}
+
+
+</style><style>
+.section.compact-section {
+  padding: 34px 38px !important;
+}
+.section.stack-section .section-head {
+  display: block !important;
+  justify-content: flex-start !important;
+  align-items: flex-start !important;
+  gap: 20px !important;
+  margin-bottom: 18px !important;
+  text-align: left !important;
+}
+.section.stack-section .section-head h2 {
+  margin: 10px 0 0 !important;
+  text-align: left !important;
+}
+.section.stack-section .section-kicker {
+  display: block !important;
+  margin: 0 !important;
+}
+.section.source-section {
+  padding-top: 26px !important;
+  padding-bottom: 26px !important;
+}
+.section.source-section .footer-source {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  border-top: 0 !important;
+}
+.section.source-section .footer-source strong {
+  display: block;
+  margin-bottom: 12px;
+  color: #f4f7ff;
+  font-size: 13px;
+}
+.section.source-section .source-links {
+  margin-top: 0 !important;
+}
+.section {
+  margin-bottom: 44px !important;
+}
+.chart-grid + .section {
+  margin-top: 44px !important;
+}
+.section .stack-col {
+  display: grid !important;
+  gap: 16px !important;
+  min-width: 0 !important;
+}
+.section .stack-col .chart-card {
+  min-height: 260px !important;
+  padding: 20px !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+.section .stack-col .chart-head {
+  margin-bottom: 8px !important;
+}
+.section .stack-col .chart-wrap {
+  flex: 0 0 auto !important;
+  min-height: 170px !important;
+  height: 170px !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+.section .stack-col .chart-footnote {
+  margin-top: 10px !important;
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+}
+.project-section h1,
+.project-section h2,
+.project-section h3,
+.project-section h4,
+.project-section p,
+.project-section li,
+.project-section .meta-pill,
+.project-section .metric-label,
+.project-section .metric-value,
+.project-section .metric-text,
+.project-section .mini-stat,
+.project-section .body-copy,
+.project-section .note,
+.project-section .caption,
+.project-section .card,
+.project-section .role-item,
+.project-section .evidence-item,
+.project-section .decision,
+.project-section .guardrail-item,
+.project-section .chart-footnote,
+.project-section .chart-chip,
+.project-section .step,
+.project-section .step p,
+.project-section .step li,
+.project-section .shap-title,
+.project-section .shap-desc,
+.project-section .trend-chip,
+.project-section .badge,
+.project-section .source-links a {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+.eyebrow {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: fit-content !important;
+  max-width: 100% !important;
+  padding: 14px 20px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255,255,255,0.78) !important;
+  background: rgba(255,255,255,0.86) !important;
+  box-shadow: 0 14px 34px rgba(49,88,224,0.12), inset 0 1px 0 rgba(255,255,255,0.9) !important;
+  color: #3158e0 !important;
+  font-size: 13px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.10em !important;
+  line-height: 1.2 !important;
+  text-transform: uppercase !important;
+  white-space: normal !important;
+}
+.eyebrow + .hero {
+  margin-top: 44px !important;
+}
+.hero {
+  background: transparent !important;
+  padding: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  overflow: visible !important;
+}
+</style></head>
+<body><section class="project-section"><div class="container">
+<section class="project-section" id="project-01">
+<div class="container">
+<div class="eyebrow">PROJECT 01 / 04 · MAIN PROJECT · AI DEFAULT PREDICTION</div>
+<div class="hero">
+<div class="hero-main">
+<div class="meta-row">
+<span class="meta-pill">2025.11 · 1개월</span>
+<span class="meta-pill">3인 팀 프로젝트</span>
+<span class="meta-pill">피처 엔지니어링 · 실험 해석 · 발표</span>
+</div>
+<h1 class="hero-title">
+            AI 기반 <span class="accent">기업 부도 예측</span><br/>
+            금융 의사결정을 위한 조기경보 시스템
+          </h1>
+<p class="hero-desc">
+            극단적 불균형 데이터(1:65)에서 <strong>부도 미탐지(FN) 최소화</strong>를 핵심 목표로 설정하고,
+            도메인 기반 특성 공학으로 실무 적용 가능한 리스크 탐지 시스템을 설계했습니다.
+          </p>
+</div>
+<aside class="hero-side">
+<div>
+<h3>핵심 포지셔닝</h3>
+<p>“부도 가능성을 더 정확히 맞히는 모델”이 아니라, <strong>놓치면 큰 손실이 나는 부도 기업을 먼저 걸러내는 모델</strong>로 설계했습니다.</p>
+</div>
+<div class="big-kpi">
+<div class="mini-stat">
+<div class="label">Final Choice</div>
+<div class="value">CatBoost</div>
+<div class="sub">복잡도 대비 성능·해석 균형</div>
+</div>
+<div class="mini-stat">
+<div class="label">Threshold</div>
+<div class="value">0.0856</div>
+<div class="sub">Validation + CV 평균</div>
+</div>
+<div class="mini-stat">
+<div class="label">Feature Strategy</div>
+<div class="value">52개</div>
+<div class="sub">부도 3대 경로 기반 설계</div>
+</div>
+<div class="mini-stat">
+<div class="label">Risk Policy</div>
+<div class="value">Recall↑</div>
+<div class="sub">FN 최소화 중심 운영 정책</div>
+</div>
+</div>
+</aside>
+</div>
+<div class="metrics-grid">
+<div class="metric-card brand">
+<div class="metric-label">Recall</div>
+<div class="metric-value">71.71%</div>
+<div class="metric-text">실제 부도 152개 중 109개를 사전 탐지한 조기경보 성능</div>
+</div>
+<div class="metric-card good">
+<div class="metric-label">PR-AUC</div>
+<div class="metric-value">0.1033</div>
+<div class="metric-text">무작위 예측 대비 6.8배 효율. 극불균형 데이터에서 핵심 지표</div>
+</div>
+<div class="metric-card violet">
+<div class="metric-label">ROC-AUC</div>
+<div class="metric-value">0.8347</div>
+<div class="metric-text">전반적 분류 성능도 안정적으로 확보</div>
+</div>
+<div class="metric-card warn">
+<div class="metric-label">F2-Score</div>
+<div class="metric-value">0.2036</div>
+<div class="metric-text">Precision보다 Recall을 더 크게 반영한 운영형 지표</div>
+</div>
+<div class="metric-card">
+<div class="metric-label">Imbalance</div>
+<div class="metric-value">1 : 65</div>
+<div class="metric-text">정확도보다 PR-AUC·Recall 중심 평가가 필수였던 이유</div>
+</div>
+</div>
+<div class="chart-grid" style="margin-top: 18px;">
+<article class="chart-card wide performance-chart">
+<div class="chart-head">
+<div>
+<h3>Test Set 최종 성능</h3>
+</div>
+</div>
+<div class="chart-wrap tall">
+<canvas id="testMetricsBarChart"></canvas>
+</div>
+<div class="chart-footnote">PR-AUC 0.1033, ROC-AUC 0.8347, Recall 0.7171을 함께 보며 성능 균형을 해석할 수 있습니다.</div>
+</article>
+</div>
+<section class="section">
+<div class="section-head">
+<div>
+<span class="section-kicker">Pipeline</span>
+<h2>EDA → 피처 엔지니어링 → 모델링 → 최적화 → 배포</h2>
+<p>단일 모델 개발이 아니라, 데이터 해석부터 운영 정책까지 연결되는 end-to-end 파이프라인으로 설계했습니다.</p>
+</div>
+</div>
+<div class="pipeline-wrap">
+<div class="pipeline">
+<div class="step">
+<div class="step-index">01</div>
+<h3>EDA</h3>
+<p>문제의 본질을 먼저 정의했습니다.</p>
+<ul>
+<li>50,000개 기업 / 부도율 1.52% / 1:65 불균형 확인</li>
+<li>정확도 대신 PR-AUC·Recall·F2가 핵심이라는 기준 수립</li>
+<li>유동성 지표가 부도 조기 경보에 가장 민감하다는 인사이트 확보</li>
+</ul>
+</div>
+<div class="step">
+<div class="step-index">02</div>
+<h3>Feature Engineering</h3>
+<p>원본 변수 나열에서 도메인 구조로 전환했습니다.</p>
+<ul>
+<li>부도 3대 경로 기반 52개 도메인 피처 설계</li>
+<li>유동성 위기 / 지급불능 / 재무조작 / 한국시장 특화 반영</li>
+<li>누수 변수 제거 후 검증 가능한 feature set 구성</li>
+</ul>
+</div>
+<div class="step">
+<div class="step-index">03</div>
+<h3>Modeling</h3>
+<p>극불균형 환경에 맞는 학습 전략을 실험했습니다.</p>
+<ul>
+<li>SMOTE, Borderline-SMOTE, Class Weight 비교</li>
+<li>LightGBM, XGBoost, CatBoost 등 후보 성능 비교</li>
+<li>CatBoost를 단일 최종 모델로 선정</li>
+</ul>
+</div>
+<div class="step">
+<div class="step-index">04</div>
+<h3>Optimization</h3>
+<p>운영 정책까지 고려한 threshold tuning을 적용했습니다.</p>
+<ul>
+<li>Recall 80% 기준과 F2 최적점을 함께 검토</li>
+<li>Validation + CV 평균으로 최종 임계값 0.0856 확정</li>
+<li>Traffic Light 3단계 리스크 등급 체계 구현</li>
+</ul>
+</div>
+<div class="step">
+<div class="step-index">05</div>
+<h3>Deployment</h3>
+<p>현업 적용을 가정한 서비스 프로토타입으로 연결했습니다.</p>
+<ul>
+<li>Streamlit 기반 웹 서비스 시연</li>
+<li>DART API 연동형 기업 검색/리스크 확인 플로우</li>
+<li>SHAP 기반 설명 가능한 리스크 리포트 제공</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="chart-grid" style="margin-top: 18px;">
+<article class="chart-card wide tall performance-chart">
+<div class="chart-head">
+<div>
+<h3>모델 성능 비교 (Validation PR-AUC)</h3>
+</div>
+</div>
+<div class="chart-wrap tall">
+<canvas id="modelComparisonChart"></canvas>
+</div>
+<div class="chart-footnote">Voting Ensemble은 근소하게 높았지만, 최종 선택은 해석성과 단순성을 고려한 CatBoost였습니다.</div>
+</article>
+</div>
+</section>
+<section class="section">
+<div class="section-head">
+<div>
+<span class="section-kicker">Problem Definition</span>
+<h2>문제 정의</h2>
+<p>"모두 정상"이라고 예측해도 정확도 98.48%가 나오는 극단적 불균형 환경에서, 정확도 대신 <strong>부도 기업을 놓치지 않는 것(FN 최소화)</strong>을 핵심 목표로 설정했습니다.</p>
+</div>
+</div>
+<div class="two-col wide-left-layout compact-left-panel">
+<div class="card">
+<p class="body-copy">이 프로젝트는 "부도 기업을 얼마나 많이 맞히는가"보다 <strong>부도 기업을 놓치지 않는가</strong>에 초점을 둔 조기경보 문제로 정의했습니다. 전체 50,000개 기업 중 부도는 758개뿐이어서, 정확도는 쉽게 높아질 수 있지만 실제 금융 리스크를 줄이는 데는 거의 도움이 되지 않았습니다.</p>
+<div class="evidence-list" style="margin-top:16px;">
+<div class="evidence-item"><strong>데이터 규모</strong><br/>50,000개 기업, 159개 원본 변수, 부도율 1.52%</div>
+<div class="evidence-item"><strong>핵심 리스크</strong><br/>False Negative는 실제 손실로 이어지므로 Recall 중심 설계가 필요</div>
+<div class="evidence-item"><strong>프로젝트 방향</strong><br/>원본 변수 선택이 아니라 도메인 기반 위험 신호 설계로 문제를 재정의</div>
+<div class="evidence-item"><strong>핵심 전략</strong><br/>Recall First · Explainable AI · Hybrid Review</div>
+</div>
+</div>
+<div class="stack-col">
+<article class="chart-card">
+<div class="chart-head">
+<div><h3>클래스 불균형</h3></div>
+</div>
+<div class="chart-wrap">
+<canvas id="imbalanceDonutChart"></canvas>
+</div>
+<div class="chart-footnote">정상 49,242개(98.48%), 부도 758개(1.52%)로, Accuracy 중심 접근이 왜 부적절한지 보여줍니다.</div>
+</article>
+<article class="chart-card">
+<div class="chart-head">
+<div><h3>데이터 분포</h3></div>
+</div>
+<div class="chart-wrap">
+<canvas id="distributionBarChart"></canvas>
+</div>
+<div class="chart-footnote">소수 클래스 학습이 어려운 구조이기 때문에 SMOTE, PR-AUC, Recall 전략이 필수였습니다.</div>
+</article>
+</div>
+</div>
+</section>
+<section class="section">
+<div class="section-head">
+<div>
+<span class="section-kicker">My Role</span>
+<h2>나의 역할과 기여</h2>
+<p>단순 실험 참여를 넘어, 분석 방향 설계와 의사결정에 직접 기여했습니다.</p>
+</div>
+</div>
+<div class="two-col wide-left-layout compact-left-panel">
+<div class="card">
+<h3>역할</h3>
+<div class="role-list">
+<div class="role-item">
+<strong>피처 엔지니어링 방향 설계</strong>
+                159개 원본 변수 기반 수동 선택과 중요도 기반 선택을 직접 시도하고, 한계를 확인한 뒤 도메인 기반 접근 전환을 주도했습니다.
+              </div>
+<div class="role-item">
+<strong>실험 참여 및 결과 해석</strong>
+                SMOTE 등 불균형 처리, 모델별 PR-AUC 비교, 임계값 실험 결과를 해석하고 최종 의사결정에 참여했습니다.
+              </div>
+<div class="role-item">
+<strong>발표 및 스토리텔링</strong>
+                FN 중심 리스크 판단, Streamlit 서비스 구조, SHAP 기반 설명 가능성을 발표 메시지로 구조화했습니다.
+              </div>
+</div>
+</div>
+<div class="card">
+<h3>핵심 기여 포인트</h3>
+<ul>
+<li>원본 변수 직접 선별 실험 후 "숫자 나열만으로는 부도 메커니즘을 설명하기 어렵다"는 한계 인식</li>
+<li>멘토의 조언을 반영해 <strong>도메인 기반 Feature Engineering</strong>으로 전환</li>
+<li>부도 3대 경로(유동성 위기 · 지급불능 · 재무조작)를 중심으로 52개 피처 설계 기여</li>
+<li>SMOTE, Borderline-SMOTE, Class Weight 등 비교 후 Recall 중심 운영에 적합한 실험 방향 도출</li>
+<li>Data Leakage 변수(<strong>이해관계자_불신지수</strong>)를 직접 식별·제거</li>
+<li>Validation과 CV 결과를 함께 반영해 임계값을 평균 산정, 과적합 리스크 완화</li>
+</ul>
+</div>
+</div>
+</section>
+<section class="section">
+<div class="section-head">
+<div>
+<span class="section-kicker">Decision Making</span>
+<h2>차별화된 의사결정</h2>
+<p>이 프로젝트의 강점은 모델 점수보다도, 왜 그런 선택을 했는지 설명할 수 있다는 점입니다.</p>
+</div>
+</div>
+<div class="three-col">
+<div class="card">
+<h3>왜 Recall을 최우선으로?</h3>
+<p class="body-copy">부도 기업을 정상으로 <strong>놓치면(FN) 대출 손실이 직접 발생</strong>하지만, 정상 기업을 부도로 예측하면(FP) 심사를 한 번 더 하면 됩니다. 비용 구조가 비대칭이므로 Recall 중심 설계가 유일한 선택이었습니다.</p>
+</div>
+<div class="card">
+<h3>왜 CatBoost 단일 모델?</h3>
+<p class="body-copy">Voting Ensemble(0.1463)이 근소하게 높았지만, <strong>Wilcoxon Test p=0.0625</strong>로 통계적 차이가 없었습니다. 복잡도 증가 대비 이득이 없으므로 해석 가능하고 유지보수가 쉬운 단일 모델을 선택했습니다.</p>
+</div>
+<div class="card">
+<h3>왜 임계값 0.0856?</h3>
+<p class="body-copy">단일 Validation 결과에 과적합되지 않도록 <strong>Validation(0.0940)과 CV(0.0772) 평균</strong>으로 산정했습니다. 운영 환경에서 일관된 성능을 보장하기 위한 선택이었습니다.</p>
+</div>
+</div>
+</section>
+
+<section class="section">
+<div class="section-head">
+<div>
+<span class="section-kicker">Explainable AI</span>
+<h2>SHAP 기반 리스크 해석</h2>
+<p>예측이 맞았는지보다 중요한 것은 "왜 위험한가"를 설명할 수 있는가였습니다.<br/>모델은 '신용 하락 → 유동성 경색 → 부도'라는 상식적인 경제 논리에 부합하게 작동합니다.</p>
+</div>
+</div>
+<div class="two-col shap-layout">
+<div class="shap-card">
+<h3 style="margin-top:0;">Top drivers of default risk</h3>
+<div class="shap-list">
+<div class="shap-item">
+<div class="rank">#1</div>
+<div>
+<div class="shap-title">신용등급점수</div>
+<div class="shap-desc">가장 압도적인 전역 영향 요인. 등급이 낮을수록 부도 확률 상승</div>
+</div>
+<span class="trend-chip trend-up">위험 ↑</span>
+</div>
+<div class="shap-item">
+<div class="rank">#2</div>
+<div>
+<div class="shap-title">재고보유일수 / 재고자산회전 관련 지표</div>
+<div class="shap-desc">재고가 현금으로 늦게 전환될수록 유동성 압박 신호 강화</div>
+</div>
+<span class="trend-chip trend-up">위험 ↑</span>
+</div>
+<div class="shap-item">
+<div class="rank">#3</div>
+<div>
+<div class="shap-title">연체심각도</div>
+<div class="shap-desc">이해관계자 신뢰 붕괴와 신용 행동 악화를 직접 반영</div>
+</div>
+<span class="trend-chip trend-up">위험 ↑</span>
+</div>
+<div class="shap-item">
+<div class="rank">#4</div>
+<div>
+<div class="shap-title">이자부담률</div>
+<div class="shap-desc">영업 현금흐름보다 금융비용이 커질수록 구조적 취약성 확대</div>
+</div>
+<span class="trend-chip trend-up">위험 ↑</span>
+</div>
+<div class="shap-item">
+<div class="rank">#5</div>
+<div>
+<div class="shap-title">운전자본 / 즉각지급능력 계열</div>
+<div class="shap-desc">현금성 자산이 단기 부채를 버틸 수 있는지 판단하는 핵심 지표</div>
+</div>
+<span class="trend-chip trend-down">건전성 ↑</span>
+</div>
+</div>
+</div>
+<div class="shap-card">
+<h3 style="margin-top:0;">Why this matters</h3>
+<div class="evidence-list">
+<div class="evidence-item">
+<strong>규제 대응</strong><br/>
+                대출 거절 또는 경고 등급 부여 시, 어떤 특성이 위험 판단을 이끌었는지 설명할 수 있습니다.
+              </div>
+<div class="evidence-item">
+<strong>심사역 협업</strong><br/>
+                단순 점수 대신 "현금 압박", "연체 신호", "신용등급 악화" 같은 언어로 해석 가능해 실무 수용성이 높습니다.
+              </div>
+<div class="evidence-item">
+<strong>모델 신뢰성 검증</strong><br/>
+                SHAP 상위 특성이 재무적으로 상식적인 방향과 일치해, 모델이 노이즈보다 의미 있는 리스크 신호를 학습했음을 보여줍니다.
+              </div>
+</div>
+</div>
+</div>
+</section>
+<section class="section">
+<div class="section-head">
+<div>
+<span class="section-kicker">Service Layer</span>
+<h2>Streamlit 기반 실시간 부도 예측 서비스</h2>
+<p>모델링에서 끝내지 않고, 분석 결과를 실무에서 바로 활용할 수 있는 웹 서비스로 연결했습니다.</p>
+</div>
+</div>
+<div class="three-col">
+<div class="card">
+<h3>🔗 DART API 연동</h3>
+<p class="body-copy">기업명 또는 코드 입력 시 DART API를 통해 최신 재무 데이터를 자동으로 수집하고, 학습된 모델에 즉시 입력합니다.</p>
+</div>
+<div class="card">
+<h3>🚦 Traffic Light 위험 등급</h3>
+<p class="body-copy">예측 확률을 Red(고위험) · Yellow(주의) · Green(안전) 3단계로 시각화하여, 심사역이 직관적으로 판단할 수 있도록 설계했습니다. 전체 심사 업무의 약 80%를 자동 처리합니다.</p>
+</div>
+<div class="card">
+<h3>📊 설명 가능한 리스크 리포트</h3>
+<p class="body-copy">예측 결과와 함께 위험 판단 근거를 리포트로 제공해 심사역이 바로 활용할 수 있도록 설계했습니다.</p>
+</div>
+</div>
+<div class="card" style="margin-top:18px;">
+<div style="display:flex; gap:32px; flex-wrap:wrap; align-items:center; justify-content:center; padding:8px 0;">
+<div style="text-align:center;">
+<div style="font-size:32px; font-weight:800; color:#2dd4bf;">7,931건</div>
+<div style="color:var(--muted); font-size:14px; margin-top:4px;">자동 승인 처리</div>
+</div>
+<div style="text-align:center;">
+<div style="font-size:32px; font-weight:800; color:#7c9cff;">79.6%</div>
+<div style="color:var(--muted); font-size:14px; margin-top:4px;">심사 업무 감소</div>
+</div>
+<div style="text-align:center;">
+<div style="font-size:32px; font-weight:800; color:#a78bfa;">~5배</div>
+<div style="color:var(--muted); font-size:14px; margin-top:4px;">운영 효율 향상</div>
+</div>
+</div>
+</div>
+</section><section class="section compact-section stack-section">
+<div class="section-head">
+
+<span class="section-kicker">Tech Stack</span>
+<h2>기술 스택</h2>
+
+</div>
+<div class="badge-wrap">
+<span class="badge">Python</span>
+<span class="badge">CatBoost</span>
+<span class="badge">XGBoost</span>
+<span class="badge">LightGBM</span>
+<span class="badge">SMOTE</span>
+<span class="badge">SHAP</span>
+<span class="badge">Pandas</span>
+<span class="badge">NumPy</span>
+<span class="badge">Scikit-learn</span>
+<span class="badge">Plotly</span>
+<span class="badge">Streamlit</span>
+</div>
+</section><section class="section compact-section source-section"><div class="footer-source">
+<strong>Source</strong>
+<div class="source-links">
+<a href="https://drive.google.com/file/d/1Q2nDVArKF7uS_EtIZTeyGYrxJeL-5f2r/view?usp=sharing" rel="noreferrer" target="_blank">발표자료 PDF</a>
+<a href="https://docs.google.com/presentation/d/1iI4K5qPuUJtHOV-FLMZ5CC-AySjMkds9/edit?usp=sharing" rel="noreferrer" target="_blank">발표자료 PPT (동영상 포함)</a>
+</div>
+</div></section>
+
+</div>
+</section>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script>
+    const chartText = '#eef2ff';
+    const chartMuted = '#aab4d6';
+    const chartGrid = 'rgba(255,255,255,0.08)';
+    const chartBorder = 'rgba(255,255,255,0.14)';
+
+    Chart.defaults.color = chartMuted;
+    Chart.defaults.font.family = 'Inter, Pretendard, "Noto Sans KR", system-ui, sans-serif';
+    Chart.defaults.borderColor = chartGrid;
+    Chart.defaults.plugins.legend.labels.usePointStyle = true;
+    Chart.defaults.plugins.legend.labels.boxWidth = 10;
+    Chart.defaults.plugins.legend.labels.padding = 16;
+    Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(10,16,31,0.96)';
+    Chart.defaults.plugins.tooltip.borderColor = chartBorder;
+    Chart.defaults.plugins.tooltip.borderWidth = 1;
+    Chart.defaults.plugins.tooltip.titleColor = chartText;
+    Chart.defaults.plugins.tooltip.bodyColor = chartMuted;
+    Chart.defaults.plugins.tooltip.padding = 12;
+
+    const numberFormat = new Intl.NumberFormat('ko-KR');
+
+    const commonScale = {
+      ticks: { color: chartMuted },
+      grid: { color: chartGrid, drawBorder: false }
+    };
+
+    new Chart(document.getElementById('imbalanceDonutChart'), {
+      type: 'doughnut',
+      data: {
+        labels: ['정상', '부도'],
+        datasets: [{
+          data: [49242, 758],
+          backgroundColor: ['rgba(89,208,255,0.88)', 'rgba(251,113,133,0.92)'],
+          borderColor: ['rgba(89,208,255,1)', 'rgba(251,113,133,1)'],
+          borderWidth: 2,
+          hoverOffset: 8
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        cutout: '68%',
+        plugins: {
+          legend: { position: 'bottom' },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => {
+                const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+                const value = ctx.raw;
+                const pct = ((value / total) * 100).toFixed(2);
+                return `${ctx.label}: ${numberFormat.format(value)}개 (${pct}%)`;
+              }
+            }
+          }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('distributionBarChart'), {
+      type: 'bar',
+      data: {
+        labels: ['정상', '부도'],
+        datasets: [{
+          label: '기업 수',
+          data: [49242, 758],
+          backgroundColor: ['rgba(89,208,255,0.82)', 'rgba(251,113,133,0.82)'],
+          borderRadius: 12,
+          borderSkipped: false,
+          maxBarThickness: 72
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ...commonScale, ticks: { color: chartText } },
+          y: {
+            ...commonScale,
+            beginAtZero: true,
+            ticks: {
+              color: chartMuted,
+              callback: (value) => numberFormat.format(value)
+            }
+          }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('testMetricsBarChart'), {
+      type: 'bar',
+      data: {
+        labels: ['PR-AUC', 'ROC-AUC', 'F2-Score', 'Precision', 'Recall'],
+        datasets: [{
+          data: [0.1033, 0.8347, 0.2036, 0.0527, 0.7171],
+          backgroundColor: [
+            'rgba(45,212,191,0.82)',
+            'rgba(124,156,255,0.82)',
+            'rgba(167,139,250,0.82)',
+            'rgba(251,191,36,0.82)',
+            'rgba(89,208,255,0.88)'
+          ],
+          borderRadius: 12,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.label}: ${ctx.raw.toFixed(4)}`
+            }
+          }
+        },
+        scales: {
+          x: {
+            ...commonScale,
+            beginAtZero: true,
+            suggestedMax: 1,
+            ticks: {
+              color: chartMuted,
+              callback: (value) => Number(value).toFixed(1)
+            }
+          },
+          y: { ...commonScale, ticks: { color: chartText } }
+        }
+      }
+    });
+
+    new Chart(document.getElementById('modelComparisonChart'), {
+      type: 'bar',
+      data: {
+        labels: ['Voting Ensemble', 'CatBoost', 'LightGBM', 'ExtraTrees', 'XGBoost', 'RandomForest', 'LogisticRegression'],
+        datasets: [{
+          label: 'Validation PR-AUC',
+          data: [0.1463, 0.1457, 0.1329, 0.1234, 0.1233, 0.1228, 0.0200],
+          backgroundColor: [
+            'rgba(45,212,191,0.70)',
+            'rgba(251,191,36,0.95)',
+            'rgba(124,156,255,0.70)',
+            'rgba(124,156,255,0.62)',
+            'rgba(124,156,255,0.56)',
+            'rgba(124,156,255,0.50)',
+            'rgba(251,113,133,0.72)'
+          ],
+          borderColor: [
+            'rgba(45,212,191,1)',
+            'rgba(251,191,36,1)',
+            'rgba(124,156,255,1)',
+            'rgba(124,156,255,0.9)',
+            'rgba(124,156,255,0.9)',
+            'rgba(124,156,255,0.9)',
+            'rgba(251,113,133,1)'
+          ],
+          borderWidth: [1, 3, 1, 1, 1, 1, 1],
+          borderRadius: 12,
+          borderSkipped: false
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: (ctx) => `${ctx.label}: ${ctx.raw.toFixed(4)}`
+            }
+          }
+        },
+        scales: {
+          x: {
+            ...commonScale,
+            ticks: {
+              color: chartMuted,
+              maxRotation: 0,
+              minRotation: 0,
+              callback: function(value) {
+                const label = this.getLabelForValue(value);
+                return label === 'LogisticRegression' ? 'Logistic\nRegression' : label;
+              }
+            }
+          },
+          y: {
+            ...commonScale,
+            beginAtZero: true,
+            suggestedMax: 0.16,
+            ticks: {
+              color: chartMuted,
+              callback: (value) => Number(value).toFixed(2)
+            }
+          }
+        }
+      }
+    });
+
+  </script>
+</div></section></body>
+</html>
