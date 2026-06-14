@@ -404,6 +404,153 @@
       color: var(--accent);
     }
 
+    .project4-thumb {
+      height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 18px;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(49, 88, 224, 0.16), transparent 34%),
+        radial-gradient(circle at 100% 100%, rgba(15, 157, 138, 0.16), transparent 38%),
+        linear-gradient(135deg, #f4f7ff 0%, #f5fcfb 100%);
+      border-bottom: 1px solid rgba(17, 24, 39, 0.04);
+    }
+
+    .project4-thumb-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .project4-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(49, 88, 224, 0.09);
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      color: var(--accent);
+      text-transform: uppercase;
+      box-shadow: 0 8px 20px rgba(49, 88, 224, 0.06);
+    }
+
+    .project4-title-mini {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      text-align: right;
+      line-height: 1.4;
+    }
+
+    .project4-flow {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .project4-pane {
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(17, 24, 39, 0.07);
+      border-radius: 20px;
+      padding: 16px 14px;
+      box-shadow: 0 10px 24px rgba(17, 24, 39, 0.05);
+      min-height: 112px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .project4-pane.before {
+      background: linear-gradient(180deg, #ffffff 0%, #f5f8ff 100%);
+      border-color: rgba(49, 88, 224, 0.12);
+    }
+
+    .project4-pane.after {
+      background: linear-gradient(180deg, #ffffff 0%, #f2fcf8 100%);
+      border-color: rgba(15, 157, 138, 0.16);
+    }
+
+    .project4-pane-label {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .project4-pane.before .project4-pane-label {
+      color: var(--accent);
+    }
+
+    .project4-pane.after .project4-pane-label {
+      color: var(--accent2);
+    }
+
+    .project4-pane-title {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .project4-pane-copy {
+      font-size: 12px;
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .project4-arrow {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      background: white;
+      border: 1px solid rgba(17, 24, 39, 0.08);
+      display: grid;
+      place-items: center;
+      color: var(--accent2);
+      font-size: 20px;
+      font-weight: 800;
+      box-shadow: 0 8px 20px rgba(17, 24, 39, 0.06);
+    }
+
+    .project4-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .project4-points {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .project4-point {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.78);
+      border: 1px solid rgba(17, 24, 39, 0.06);
+    }
+
+    .project4-highlight {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--accent2);
+      letter-spacing: -0.01em;
+    }
+
     .project-body {
       padding: 24px;
     }
@@ -764,20 +911,48 @@ body, h1, h2, h3, h4, p, li, span, div {
                 <span>멀티 LLM <strong>파이프라인</strong></span>
               </div>
             </div>
-          </a><a class="project-card mini-card" href="project4_resume_helper.html">
-            <div class="project-thumb-placeholder">📝</div>
+          </a><a class="project-card mini-card" href="project4_job_toolkit_final.html">
+            <div class="project-thumb project4-thumb">
+              <div class="project4-thumb-top">
+                <span class="project4-chip">AI JOB TOOLKIT</span>
+                <div class="project4-title-mini">Project 04<br />CLI → Web App</div>
+              </div>
+              <div class="project4-flow">
+                <div class="project4-pane before">
+                  <div>
+                    <div class="project4-pane-label">Before</div>
+                    <div class="project4-pane-title">자소서 도우미</div>
+                    <div class="project4-pane-copy">6대 결함 탐지 · 구조 첨삭 · 가드레일</div>
+                  </div>
+                </div>
+                <div class="project4-arrow">→</div>
+                <div class="project4-pane after">
+                  <div>
+                    <div class="project4-pane-label">After</div>
+                    <div class="project4-pane-title">AI 면접 코치</div>
+                    <div class="project4-pane-copy">질문 생성 · SSE 피드백 · 멀티페이지 UX</div>
+                  </div>
+                </div>
+              </div>
+              <div class="project4-bottom">
+                <div class="project4-points">
+                  <span class="project4-point">5일 + 5일</span>
+                  <span class="project4-point">멀티에이전트</span>
+                </div>
+                <div class="project4-highlight">서비스 확장형 프로젝트</div>
+              </div>
+            </div>
             <div class="project-body">
               <div class="project-type mini-type">🔧 미니 프로젝트</div>
-              <h3 class="project-title">자소서 도우미 — 멀티에이전트 CLI</h3>
-              <p class="project-desc">한국 자소서 6대 결함 탐지 및 개선 제안 CLI 툴. Triage → 전문가 3종 라우팅 구조, 허위 작성 차단 가드레일 포함.</p>
+              <h3 class="project-title">취업 준비 AI 툴킷 — 자소서 도우미 + AI 면접 코치</h3>
+              <p class="project-desc">자소서 첨삭 CLI에서 시작해 이력서 기반 질문 생성과 실시간 피드백 웹앱으로 확장한 AI 취업 지원 시리즈. 문제 정의 → 기능 검증 → 서비스 구조화 흐름을 담았습니다.</p>
               <div class="project-tags">
-                <span class="project-tag teal">OpenAI Agents SDK</span>
-                <span class="project-tag teal">Pydantic</span>
-                <span class="project-tag teal">MCP</span>
+                <span class="project-tag teal">OpenAI Agents SDK</span><span class="project-tag teal">Streamlit</span>
+                <span class="project-tag teal">FastAPI</span><span class="project-tag teal">Pydantic</span>
               </div>
               <div class="project-metrics">
-                <span><strong>4개</strong> 에이전트</span>
-                <span>결함 <strong>6대</strong> 탐지</span>
+                <span><strong>5일 + 5일</strong> 스프린트</span>
+                <span><strong>CLI → 웹앱</strong> 확장</span>
               </div>
             </div>
           </a>
@@ -794,7 +969,8 @@ body, h1, h2, h3, h4, p, li, span, div {
               target="_blank">GitHub</a><a class="contact-link" href="https://github.com/HongHyunkyoung/SORA_Project"
               target="_blank">SORA</a><a class="contact-link" href="https://github.com/HongHyunkyoung/picture_diary"
               target="_blank">그림일기</a><a class="contact-link" href="https://github.com/HongHyunkyoung/resume-helper"
-              target="_blank">자소서 도우미</a></div>
+              target="_blank">자소서 도우미</a><a class="contact-link" href="https://github.com/HongHyunkyoung/interview_app"
+              target="_blank">AI 면접 코치</a></div>
         </div>
       </div>
     </section>
@@ -806,6 +982,7 @@ body, h1, h2, h3, h4, p, li, span, div {
       <span>Data Analyst · AI Service Planner</span>
     </div>
   </footer>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 
 </html>
