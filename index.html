@@ -910,6 +910,162 @@ body, h1, h2, h3, h4, p, li, span, div {
   word-break: keep-all;
   overflow-wrap: break-word;
 }
+
+/* ── 바이브 코딩 섹션 ── */
+.vibe-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.vibe-card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s, transform 0.2s;
+  text-decoration: none;
+  color: inherit;
+}
+
+.vibe-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-3px);
+}
+
+.vibe-thumb {
+  width: 100%;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.vibe-thumb svg {
+  width: 100%;
+  height: 100%;
+}
+
+.vibe-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+}
+
+.vibe-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.vibe-title {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+
+.vibe-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .05em;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.vibe-badge.hackathon {
+  background: rgba(139, 92, 246, 0.1);
+  color: var(--accent3);
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.vibe-badge.personal {
+  background: rgba(15, 157, 138, 0.1);
+  color: var(--accent2);
+  border: 1px solid rgba(15, 157, 138, 0.2);
+}
+
+.vibe-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vibe-row {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 10px;
+  align-items: baseline;
+  font-size: 14px;
+}
+
+.vibe-row-label {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: 3px 0;
+  color: var(--muted);
+}
+
+.vibe-row-label.prob { color: #e05c31; }
+.vibe-row-label.sol  { color: var(--accent); }
+.vibe-row-label.res  { color: var(--accent2); }
+
+.vibe-row-text {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.vibe-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  flex-wrap: wrap;
+}
+
+.vibe-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.vibe-tag {
+  font-size: 11px;
+  padding: 4px 9px;
+  background: var(--surface2);
+  border-radius: 999px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.vibe-link {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.vibe-link.green { color: var(--accent2); }
+
+@media (max-width: 680px) {
+  .vibe-grid { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 
@@ -941,7 +1097,7 @@ body, h1, h2, h3, h4, p, li, span, div {
           <a href="https://github.com/HongHyunkyoung" target="_blank" class="btn-secondary">GitHub 보기</a>
         </div>
         <div class="hero-proof">
-          <div class="proof-item"><strong>4</strong><span>Featured Projects</span></div>
+          <div class="proof-item"><strong>6</strong><span>Featured Projects</span></div>
           <div class="proof-item"><strong>Data · AI · Planning</strong><span>문제 정의부터 서비스 구현까지</span></div>
           <div class="proof-item"><strong>Impact 중심 Case Study</strong><span>의사결정 플로우와 비용 구조 최적화 증명</span></div>
         </div>
@@ -1099,6 +1255,142 @@ body, h1, h2, h3, h4, p, li, span, div {
               </div>
             </div>
           </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="vibe">
+      <div class="container">
+        <div class="section-head">
+          <span class="section-kicker">Vibe Coding</span>
+          <h2 class="section-title">바이브 코딩</h2>
+          <p class="section-sub">직접 겪은 불편함에서 시작해, 빠르게 만들고 실제로 써본 사이드 프로젝트들</p>
+        </div>
+        <div class="vibe-grid">
+
+          <!-- Translator -->
+          <a class="vibe-card" href="vibe_translator.html">
+            <div class="vibe-thumb">
+              <svg viewBox="0 0 480 180" xmlns="http://www.w3.org/2000/svg">
+                <rect width="480" height="180" fill="#eef2ff"/>
+                <!-- 마이크 -->
+                <rect x="220" y="36" width="40" height="56" rx="20" fill="#3158e0" opacity="0.18"/>
+                <rect x="230" y="40" width="20" height="48" rx="10" fill="#3158e0"/>
+                <path d="M205 84 Q205 108 240 108 Q275 108 275 84" stroke="#3158e0" stroke-width="3" fill="none" stroke-linecap="round"/>
+                <line x1="240" y1="108" x2="240" y2="120" stroke="#3158e0" stroke-width="3" stroke-linecap="round"/>
+                <line x1="226" y1="120" x2="254" y2="120" stroke="#3158e0" stroke-width="3" stroke-linecap="round"/>
+                <!-- 음파 왼쪽 -->
+                <path d="M190 66 Q183 76 183 90 Q183 104 190 114" stroke="#3158e0" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+                <path d="M178 58 Q167 74 167 90 Q167 106 178 122" stroke="#3158e0" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.3"/>
+                <!-- 음파 오른쪽 -->
+                <path d="M290 66 Q297 76 297 90 Q297 104 290 114" stroke="#3158e0" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.5"/>
+                <path d="M302 58 Q313 74 313 90 Q313 106 302 122" stroke="#3158e0" stroke-width="2" fill="none" stroke-linecap="round" opacity="0.3"/>
+                <!-- 말풍선 EN -->
+                <rect x="52" y="52" width="110" height="44" rx="12" fill="white" opacity="0.9"/>
+                <polygon points="88,96 100,96 94,108" fill="white" opacity="0.9"/>
+                <text x="107" y="79" text-anchor="middle" font-size="13" font-weight="700" fill="#3158e0" font-family="sans-serif">🇺🇸 English</text>
+                <!-- 말풍선 KO -->
+                <rect x="318" y="52" width="110" height="44" rx="12" fill="white" opacity="0.9"/>
+                <polygon points="354,96 366,96 360,108" fill="white" opacity="0.9"/>
+                <text x="373" y="79" text-anchor="middle" font-size="13" font-weight="700" fill="#3158e0" font-family="sans-serif">🇰🇷 한국어</text>
+                <!-- 화살표 -->
+                <path d="M164 90 L316 90" stroke="#3158e0" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.4"/>
+                <text x="240" y="160" text-anchor="middle" font-size="11" fill="#3158e0" opacity="0.6" font-family="sans-serif">Gemini Live API</text>
+              </svg>
+            </div>
+            <div class="vibe-body">
+              <div class="vibe-top">
+                <div class="vibe-title">Translator</div>
+                <span class="vibe-badge personal">개인 프로젝트</span>
+              </div>
+              <div class="vibe-rows">
+                <div class="vibe-row">
+                  <span class="vibe-row-label prob">문제</span>
+                  <span class="vibe-row-text">강연 동시통역은 사람이 하다 보니 딜레이가 발생</span>
+                </div>
+                <div class="vibe-row">
+                  <span class="vibe-row-label sol">해결</span>
+                  <span class="vibe-row-text">Gemini Live API로 실시간 AI 동시통역 구현</span>
+                </div>
+                <div class="vibe-row">
+                  <span class="vibe-row-label res">결과</span>
+                  <span class="vibe-row-text">translator-inky-one.vercel.app 배포</span>
+                </div>
+              </div>
+              <div class="vibe-footer">
+                <div class="vibe-tags">
+                  <span class="vibe-tag">Gemini Live</span>
+                  <span class="vibe-tag">Whisper(on-device)</span>
+                  <span class="vibe-tag">Vercel</span>
+                </div>
+                <span class="vibe-link green">자세히 보기 →</span>
+              </div>
+            </div>
+          </a>
+
+          <!-- Multi Viral -->
+          <a class="vibe-card" href="vibe_multiviral.html">
+            <div class="vibe-thumb">
+              <svg viewBox="0 0 480 180" xmlns="http://www.w3.org/2000/svg">
+                <rect width="480" height="180" fill="#f5f0ff"/>
+                <!-- 중앙 URL 입력 -->
+                <rect x="155" y="70" width="170" height="36" rx="10" fill="white" opacity="0.95"/>
+                <text x="240" y="93" text-anchor="middle" font-size="11.5" fill="#8b5cf6" font-weight="700" font-family="sans-serif">🔗 URL 입력</text>
+                <!-- 화살표 3방향 -->
+                <line x1="240" y1="106" x2="105" y2="132" stroke="#8b5cf6" stroke-width="2" opacity="0.5"/>
+                <line x1="240" y1="106" x2="240" y2="136" stroke="#8b5cf6" stroke-width="2" opacity="0.5"/>
+                <line x1="240" y1="106" x2="375" y2="132" stroke="#8b5cf6" stroke-width="2" opacity="0.5"/>
+                <!-- LinkedIn 카드 -->
+                <rect x="52" y="132" width="100" height="32" rx="8" fill="#0077b5" opacity="0.9"/>
+                <text x="102" y="152" text-anchor="middle" font-size="11" fill="white" font-weight="700" font-family="sans-serif">LinkedIn</text>
+                <!-- X 카드 -->
+                <rect x="190" y="136" width="100" height="32" rx="8" fill="#1a1a1a" opacity="0.85"/>
+                <text x="240" y="156" text-anchor="middle" font-size="11" fill="white" font-weight="700" font-family="sans-serif">𝕏 (Twitter)</text>
+                <!-- Instagram 카드 -->
+                <rect x="328" y="132" width="100" height="32" rx="8" fill="url(#ig)" opacity="0.9"/>
+                <defs>
+                  <linearGradient id="ig" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#f09433"/>
+                    <stop offset="50%" stop-color="#e6683c"/>
+                    <stop offset="100%" stop-color="#bc1888"/>
+                  </linearGradient>
+                </defs>
+                <text x="378" y="152" text-anchor="middle" font-size="11" fill="white" font-weight="700" font-family="sans-serif">Instagram</text>
+                <!-- Claude API badge -->
+                <rect x="170" y="34" width="140" height="26" rx="13" fill="#8b5cf6" opacity="0.15"/>
+                <text x="240" y="51" text-anchor="middle" font-size="11" fill="#8b5cf6" font-weight="700" font-family="sans-serif">Gemini API · 3단 체이닝</text>
+              </svg>
+            </div>
+            <div class="vibe-body">
+              <div class="vibe-top">
+                <div class="vibe-title">Multi Viral</div>
+                <span class="vibe-badge hackathon">해커톤</span>
+              </div>
+              <div class="vibe-rows">
+                <div class="vibe-row">
+                  <span class="vibe-row-label prob">문제</span>
+                  <span class="vibe-row-text">플랫폼마다 콘텐츠를 따로 써야 하는 번거로움</span>
+                </div>
+                <div class="vibe-row">
+                  <span class="vibe-row-label sol">해결</span>
+                  <span class="vibe-row-text">3단 프롬프트 체이닝으로 LinkedIn·X·Instagram 최적화 콘텐츠 동시 생성</span>
+                </div>
+                <div class="vibe-row">
+                  <span class="vibe-row-label res">결과</span>
+                  <span class="vibe-row-text">multi-viral.vercel.app 배포 (CMUX × AIM 해커톤)</span>
+                </div>
+              </div>
+              <div class="vibe-footer">
+                <div class="vibe-tags">
+                  <span class="vibe-tag">Gemini API</span>
+                  <span class="vibe-tag">Prompt Chaining</span>
+                  <span class="vibe-tag">Vercel</span>
+                </div>
+                <span class="vibe-link">자세히 보기 →</span>
+              </div>
+            </div>
+          </a>
+
         </div>
       </div>
     </section>
