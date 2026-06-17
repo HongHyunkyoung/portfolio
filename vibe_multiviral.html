@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Vibe · Multi Viral — SNS 바이럴 콘텐츠 자동 생성</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --line: rgba(255,255,255,0.08);
+      --text: #eef2ff;
+      --muted: #aab4d6;
+      --subtle: #7f8bb3;
+      --brand: #7c9cff;
+      --brand-2: #59d0ff;
+      --good: #2dd4bf;
+      --warn: #fbbf24;
+      --violet: #a78bfa;
+      --shadow: 0 24px 60px rgba(0,0,0,0.38);
+      --radius-xl: 28px;
+      --max: 1240px;
+    }
+    * { box-sizing: border-box; }
+    html {
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 10% 12%, rgba(89,208,255,0.14), transparent 24%),
+        radial-gradient(circle at 88% 10%, rgba(124,156,255,0.16), transparent 24%),
+        linear-gradient(180deg, #f7f4ee 0%, #f1ede6 100%);
+      color: var(--text);
+      font-family: Inter, Pretendard, "Noto Sans KR", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.68;
+      letter-spacing: -0.01em;
+      padding: 28px 0 72px;
+    }
+    a { color: #9edbff; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .project-section {
+      position: relative;
+      overflow: hidden;
+      padding: 0 0 30px;
+    }
+
+    .project-section::before,
+    .project-section::after {
+      content: "";
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(70px);
+      opacity: 0.42;
+      pointer-events: none;
+    }
+
+    .project-section::before {
+      width: 280px;
+      height: 280px;
+      background: rgba(89, 208, 255, 0.24);
+      top: -40px;
+      left: -80px;
+    }
+
+    .project-section::after {
+      width: 360px;
+      height: 360px;
+      background: rgba(167, 139, 250, 0.20);
+      right: -120px;
+      bottom: -120px;
+    }
+
+    .container {
+      width: min(var(--max), calc(100% - 40px));
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .back-row { margin-bottom: 20px; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 16px;
+      border-radius: 999px;
+      background: rgba(20,29,54,0.88);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #cfe7ff;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      backdrop-filter: blur(10px);
+    }
+    .back-link:hover { text-decoration: none; background: rgba(30,42,74,0.92); }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: fit-content;
+      max-width: 100%;
+      padding: 14px 20px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.78);
+      background: rgba(255,255,255,0.86);
+      color: #3158e0;
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.10em;
+      line-height: 1.2;
+      text-transform: uppercase;
+      white-space: normal;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 14px 34px rgba(49,88,224,0.12), inset 0 1px 0 rgba(255,255,255,0.9);
+      margin-bottom: 18px;
+    }
+
+    .card, .section, .hero-main, .hero-side {
+      background: linear-gradient(180deg, rgba(20,29,54,0.94), rgba(13,19,38,0.96));
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 28px;
+      align-items: stretch;
+      margin-top: 18px;
+      margin-bottom: 28px;
+    }
+
+    .hero-main {
+      padding: 34px 34px 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-main::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(167,139,250,0.18), transparent 46%, rgba(124,156,255,0.10));
+      pointer-events: none;
+    }
+    .hero-main > * { position: relative; z-index: 1; }
+
+    .hero-title {
+      margin: 16px 0 14px;
+      font-size: clamp(32px, 4.7vw, 60px);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+    .hero-title span { color: #d4b8ff; }
+
+    .hero-desc {
+      max-width: 800px;
+      margin: 0 0 26px;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 0;
+    }
+    .meta-pill {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #d9e2ff;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .hero-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .hero-links a {
+      padding: 9px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.05);
+      color: #cfe7ff;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .hero-links a:hover { background: rgba(255,255,255,0.09); text-decoration: none; }
+
+    .hero-side {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 18px;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .metric-card {
+      padding: 22px 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(180deg, rgba(20,29,54,0.92), rgba(12,18,35,0.96));
+    }
+    .metric-card.purple { background: linear-gradient(180deg, rgba(61,39,109,0.90), rgba(24,17,43,0.96)); }
+    .metric-card.teal   { background: linear-gradient(180deg, rgba(18,74,70,0.88), rgba(11,31,36,0.96)); }
+    .metric-card.blue   { background: linear-gradient(180deg, rgba(30,52,110,0.90), rgba(14,24,48,0.96)); }
+    .metric-card.yellow { background: linear-gradient(180deg, rgba(86,63,13,0.90), rgba(33,24,8,0.96)); }
+    .metric-label {
+      color: var(--subtle);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      margin-bottom: 8px;
+    }
+    .metric-value {
+      font-size: clamp(24px, 2.4vw, 36px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+    .metric-text { color: var(--muted); font-size: 13px; line-height: 1.5; }
+
+    .section {
+      margin-top: 0;
+      margin-bottom: 28px;
+      padding: 32px;
+    }
+    .lessons-section {
+      background: linear-gradient(180deg, rgba(20,29,54,0.94), rgba(13,19,38,0.96));
+      border-color: var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      padding: 32px;
+      overflow: hidden;
+    }
+    .lessons-section .section-head {
+      margin-bottom: 34px;
+    }
+    .lessons-section .section-kicker {
+      color: #9dbbff;
+      margin-bottom: 12px;
+    }
+    .lessons-section .section-head h2 {
+      font-size: 22px;
+      color: #f5f7ff;
+      margin-bottom: 16px;
+    }
+    .lessons-section .section-head p {
+      color: #b9c3df;
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .lessons-section .card {
+      background: linear-gradient(180deg, rgba(14,22,43,0.98), rgba(10,17,34,0.98));
+      border: 1px solid rgba(124,156,255,0.12);
+      border-radius: 22px;
+      box-shadow: none;
+      padding: 22px;
+    }
+    .lessons-section .card h3 {
+      color: #f4f7ff !important;
+      font-size: 16px;
+      margin-bottom: 14px !important;
+    }
+    .section-kicker {
+      display: block;
+      color: #c4a8ff;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.10em;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .section-head {
+      display: block;
+      margin-bottom: 24px;
+    }
+    .section-head h2 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      letter-spacing: -0.03em;
+    }
+    .section-head p { color: var(--muted); margin: 0; }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .three-col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .card {
+      padding: 22px;
+      border-radius: 22px;
+    }
+    .card h3 { margin: 0 0 10px; letter-spacing: -0.02em; }
+    .card p { color: var(--muted); margin: 0 0 14px; font-size: 14px; }
+
+    .item-list { display: flex; flex-direction: column; gap: 12px; }
+    .lesson-list { display: flex; flex-direction: column; gap: 18px; }
+    .lesson-item strong { display: block; color: #f4f7ff; font-size: 15px; margin-bottom: 6px; }
+    .lesson-item p { color: var(--muted); font-size: 14px; line-height: 1.7; margin: 0; }
+    .item {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .item strong { color: #f4f7ff; display: block; margin-bottom: 4px; font-size: 14px; }
+    .item span { color: var(--muted); font-size: 13px; }
+
+    .pipeline-wrap { overflow-x: auto; padding-bottom: 2px; }
+    .pipeline {
+      min-width: 720px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+    .step {
+      position: relative;
+      padding: 22px 20px 20px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(22,31,56,0.95), rgba(12,17,32,0.98));
+      border: 1px solid rgba(255,255,255,0.08);
+      min-height: 120px;
+    }
+    .step:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      top: 50%;
+      right: -14px;
+      transform: translateY(-50%);
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: #1f2a4b;
+      border: 1px solid rgba(255,255,255,0.10);
+      color: #dbe5ff;
+      font-weight: 900;
+      z-index: 2;
+    }
+    .step-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .step-index {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, rgba(167,139,250,0.28), rgba(124,156,255,0.20));
+      border: 1px solid rgba(167,139,250,0.25);
+      font-weight: 800;
+      flex-shrink: 0;
+      font-size: 15px;
+    }
+    .step h3 { margin: 0; font-size: 18px; }
+    .step p { margin: 0; color: var(--muted); font-size: 14px; }
+
+    .platform-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    .platform-card {
+      padding: 22px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+    }
+    .platform-name {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+    .platform-name.li { color: #60b3f0; }
+    .platform-name.tw { color: #e4e4e4; }
+    .platform-name.ig { color: #f09433; }
+    .platform-card p { color: var(--muted); font-size: 13px; margin: 0 0 10px; }
+    .platform-card .algo-tag {
+      display: inline-block;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--muted);
+      margin: 3px 3px 0 0;
+    }
+
+    .badge-wrap { display: flex; flex-wrap: wrap; gap: 10px; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #e8eeff;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .badge::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--violet), var(--brand));
+    }
+
+    .source-links { display: flex; flex-wrap: wrap; gap: 10px; }
+    .source-links a {
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      color: #cfe7ff;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .footer {
+      padding: 26px 28px;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(180deg, rgba(20,29,54,0.94), rgba(13,19,38,0.96));
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      margin-top: 0;
+    }
+    .footer-source strong {
+      display: block;
+      margin-bottom: 12px;
+      color: var(--subtle);
+      font-size: 13px;
+    }
+
+    @media (max-width: 1100px) {
+      .hero { grid-template-columns: 1fr; }
+      .two-col, .three-col, .platform-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 640px) {
+      .project-section { padding: 48px 16px 72px; }
+      .metric-grid { grid-template-columns: 1fr 1fr; }
+      .hero-main, .hero-side, .section { padding: 20px; }
+      .lessons-section { padding: 24px 16px 30px; }
+      .lessons-section .section-head h2 { font-size: 25px; }
+      .lessons-section .section-head p { font-size: 16px; }
+      .lessons-section .card { padding: 24px 20px; }
+    }
+
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    p,
+    li,
+    span,
+    div,
+    a {
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+  </style>
+</head>
+<body>
+  <section class="project-section" id="vibe-multiviral">
+  <div class="container">
+    <div class="back-row">
+      <a class="back-link" href="index.html">← 포트폴리오로 돌아가기</a>
+    </div>
+
+    <div class="eyebrow">VIBE CODING · CMUX × AIM 해커톤</div>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-main">
+        <div class="meta-row">
+          <span class="meta-pill">🏆 CMUX × AIM 해커톤</span>
+          <span class="meta-pill">단독 기획·설계·개발·배포</span>
+          <span class="meta-pill">Vercel 배포</span>
+        </div>
+        <h1 class="hero-title">Multi Viral —<br /><span>SNS 콘텐츠 자동 생성</span></h1>
+        <p class="hero-desc">
+          플랫폼마다 콘텐츠를 따로 써야 하는 번거로움을 없앴다.
+          URL 하나를 입력하면 Gemini API 3단 프롬프트 체이닝으로
+          LinkedIn·X·Instagram에 최적화된 콘텐츠를 동시에 생성한다.
+          각 플랫폼의 알고리즘 특성(북마크 가중치, 체류시간, 저장율)을 프롬프트 설계에 직접 반영했다.
+        </p>
+
+      </div>
+      <aside class="hero-side">
+        <div class="metric-grid">
+          <div class="metric-card purple">
+            <div class="metric-label">프롬프트 단계</div>
+            <div class="metric-value">3단</div>
+            <div class="metric-text">체이닝 파이프라인</div>
+          </div>
+          <div class="metric-card teal">
+            <div class="metric-label">지원 플랫폼</div>
+            <div class="metric-value">3개</div>
+            <div class="metric-text">LinkedIn · X · Instagram</div>
+          </div>
+          <div class="metric-card blue">
+            <div class="metric-label">입력</div>
+            <div class="metric-value">URL 1개</div>
+            <div class="metric-text">기사·블로그·페이지</div>
+          </div>
+          <div class="metric-card yellow">
+            <div class="metric-label">수행 방식</div>
+            <div class="metric-value">단독</div>
+            <div class="metric-text">기획→배포 전 과정</div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- 프롬프트 체이닝 파이프라인 -->
+    <div class="section">
+      <div class="section-head">
+        <span class="section-kicker">Architecture</span>
+        <h2>3단 프롬프트 체이닝</h2>
+        <p>URL 하나에서 플랫폼별 최적화 콘텐츠까지</p>
+      </div>
+      <div class="pipeline-wrap">
+        <div class="pipeline">
+          <div class="step">
+            <div class="step-header">
+              <div class="step-index">01</div>
+              <h3>콘텐츠 추출</h3>
+            </div>
+            <p>입력된 URL에서 핵심 내용을 추출하고 구조화. 제목·요약·핵심 포인트를 정리한다.</p>
+          </div>
+          <div class="step">
+            <div class="step-header">
+              <div class="step-index">02</div>
+              <h3>플랫폼 분석</h3>
+            </div>
+            <p>각 SNS의 알고리즘 특성을 반영해 어조·길이·해시태그 전략을 결정한다.</p>
+          </div>
+          <div class="step">
+            <div class="step-header">
+              <div class="step-index">03</div>
+              <h3>콘텐츠 생성</h3>
+            </div>
+            <p>LinkedIn·X·Instagram 각 포맷에 맞게 최적화된 콘텐츠를 동시에 완성 출력한다.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 플랫폼별 알고리즘 분석 -->
+    <div class="section">
+      <div class="section-head">
+        <span class="section-kicker">Platform Strategy</span>
+        <h2>플랫폼별 알고리즘 반영 전략</h2>
+        <p>단순 번역이 아니라 각 플랫폼의 노출 메커니즘을 분석해 프롬프트에 직접 반영</p>
+      </div>
+      <div class="platform-grid">
+        <div class="platform-card">
+          <div class="platform-name li">LinkedIn</div>
+          <p>전문성과 인사이트 중심. 문단형 장문 글이 체류시간을 높이고 노출에 유리하다.</p>
+          <span class="algo-tag">체류시간 가중치</span>
+          <span class="algo-tag">전문 어조</span>
+          <span class="algo-tag">스토리 구조</span>
+        </div>
+        <div class="platform-card">
+          <div class="platform-name tw">𝕏 (Twitter)</div>
+          <p>간결한 훅과 북마크 유도가 핵심. 쓰레드 형식으로 정보를 쪼개 저장 욕구를 자극한다.</p>
+          <span class="algo-tag">북마크 가중치</span>
+          <span class="algo-tag">쓰레드 구조</span>
+          <span class="algo-tag">리트윗 유도</span>
+        </div>
+        <div class="platform-card">
+          <div class="platform-name ig">Instagram</div>
+          <p>저장율과 공유율이 핵심 지표. 첫 줄 후킹 문구와 저장을 유도하는 캡션 구조로 최적화한다.</p>
+          <span class="algo-tag">저장율 가중치</span>
+          <span class="algo-tag">캡션 구조</span>
+          <span class="algo-tag">감성 어조</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 해커톤 맥락 -->
+    <div class="section">
+      <div class="section-head">
+        <span class="section-kicker">Context</span>
+        <h2>해커톤 참가 배경</h2>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <h3 style="color:#a78bfa;">CMUX × AIM 해커톤</h3>
+          <div class="item-list">
+            <div class="item">
+              <strong>단독 수행</strong>
+              <span>기획·설계·개발·배포 전 과정을 혼자 완료</span>
+            </div>
+            <div class="item">
+              <strong>문제 정의</strong>
+              <span>마케터·크리에이터가 플랫폼마다 글을 따로 써야 하는 반복 작업</span>
+            </div>
+            <div class="item">
+              <strong>제품 검증</strong>
+              <span>Vercel 배포 후 실제 URL로 콘텐츠 생성 테스트까지 완료</span>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="color:#59d0ff;">3단 체이닝을 설계한 이유</h3>
+          <p>단계를 나눠야 플랫폼 특성이 살아난다</p>
+          <div class="item-list">
+            <div class="item">
+              <strong>한 번에 생성하면 생기는 문제</strong>
+              <span>프롬프트 하나로 3개 플랫폼을 동시에 요청하면 각 플랫폼의 어조·길이·포맷 특성이 희석되어 평균적인 글이 나온다</span>
+            </div>
+            <div class="item">
+              <strong>단계별 맥락 축적</strong>
+              <span>콘텐츠 추출 → 플랫폼 분석 → 생성 순으로 쌓으면 각 단계가 다음 단계의 품질을 높이는 컨텍스트가 된다</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 배운 점 & 개선 방향 -->
+    <div class="section lessons-section">
+      <div class="section-head">
+        <span class="section-kicker">Limitations & Lessons</span>
+        <h2>한계와 배운 점</h2>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <h3 style="color:#fbbf24; margin-bottom: 18px;">⚠️ 현재 모델의 한계</h3>
+          <div class="lesson-list">
+            <div class="lesson-item">
+              <strong>프롬프트 의존적 품질 불안정</strong>
+              <p>같은 URL을 넣어도 viral_score나 포스트 톤이 매번 다르게 나올 수 있고, 이를 제어할 메커니즘이 없습니다.</p>
+            </div>
+            <div class="lesson-item">
+              <strong>단방향 콘텐츠 타입 지원</strong>
+              <p>YouTube 자막과 블로그 본문만 처리 가능합니다. 자막이 없는 영상, 로그인이 필요한 페이지 등 실제 유저가 넣을 법한 URL의 상당수는 오류로 떨어집니다.</p>
+            </div>
+            <div class="lesson-item">
+              <strong>바이럴 스코어의 허구성</strong>
+              <p>LLM이 스스로 생성한 포스트를 스스로 채점하는 구조입니다. 실제 인게이지먼트 데이터 없이 자기 평가하는 수치라 신뢰 근거가 없습니다.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <h3 style="color:#2dd4bf; margin-bottom: 18px;">💡 개선 방향과 배운 점</h3>
+          <div class="lesson-list">
+            <div class="lesson-item">
+              <strong>개선 방향</strong>
+              <p>Few-shot 예시 포스트를 프롬프트에 삽입해 출력 품질 편차를 줄이는 방법, 실제 LinkedIn/X API로 게시 후 조회수를 역피드백하는 검증 루프 추가가 가능합니다.</p>
+            </div>
+            <div class="lesson-item">
+              <strong>그럼에도 의미 있는 이유</strong>
+              <p>3단계 프롬프트 체이닝과 병렬 실행 구조를 직접 구현했고, 해커톤 당일 URL 입력부터 UI 출력까지 동작하는 End-to-End 파이프라인을 완성했습니다.</p>
+            </div>
+            <div class="lesson-item">
+              <strong>배운 것</strong>
+              <p>프롬프트 설계가 곧 비즈니스 로직이라는 것을 체감했습니다. 로컬과 배포 환경은 다르다는 것을 직접 겪었고, IP 차단 우회 방법으로 RapidAPI 같은 중간 레이어를 활용하는 선택지가 있다는 것도 배웠습니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 기술 스택 -->
+    <div class="section">
+      <div class="section-head">
+        <span class="section-kicker">Stack</span>
+        <h2>기술 스택</h2>
+      </div>
+      <div class="badge-wrap" style="margin-bottom: 24px;">
+        <span class="badge">Gemini API</span>
+        <span class="badge">Prompt Chaining</span>
+        <span class="badge">JavaScript</span>
+        <span class="badge">Vercel</span>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="footer-source">
+        <strong>Links</strong>
+        <div class="source-links">
+          <a href="https://multi-viral.vercel.app" target="_blank" rel="noopener">multi-viral.vercel.app →</a>
+          <a href="index.html#vibe">← 바이브 코딩 섹션</a>
+        </div>
+      </div>
+    </footer>
+
+    </div>
+    </section>
+</body>
+</html>
