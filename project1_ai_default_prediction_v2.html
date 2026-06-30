@@ -1467,7 +1467,7 @@ a:hover { text-decoration: underline; }
 <div class="two-col wide-left-layout">
 <div class="card">
 <h3>불균형 데이터를 어떻게 다룰까</h3>
-<p class="body-copy">SMOTE, Borderline-SMOTE, SMOTE-Tomek, Class Weight를 비교 실험하며 오버샘플링 방법이 SMOTE 외에도 다양한 변형이 존재한다는 걸 배웠습니다.<br/><br/>1:65 불균형 데이터에서는 "모두 정상"으로만 예측해도 Accuracy 98%가 나와 평가 지표로 의미가 없었습니다. ROC-AUC도 TNR(다수 클래스를 얼마나 잘 맞히는지)이 반영돼 점수가 부풀려졌습니다. 반면 PR-AUC는 Precision·Recall만으로 계산되어 다수 클래스 예측 성능과 무관하게 부도 탐지력만 보여준다는 것을 실험을 통해 배웠고, 이를 핵심 평가 지표로 삼았습니다.<br/><br/>또한 Recall을 높이기 위해 임계값을 낮추면 FP가 폭증해 Precision이 5%대까지 떨어지는 문제가 있었습니다. "부도 기업을 놓치지 않겠다"는 목표와 "오탐이 너무 많다"는 현실 사이에서 어느 쪽을 우선할지 직접 판단해야 했습니다. 최종 임계값 0.0856은 FN 비용이 FP보다 훨씬 크다는 비용 구조에 맞게 설계된 운영 기준입니다.</p>
+<p class="body-copy">SMOTE, Borderline-SMOTE, SMOTE-Tomek, Class Weight를 비교 실험하며 모델 성능 차이를 직접 확인 후 선정하였습니다.<br/><br/>1:65 불균형 데이터에서는 "모두 정상"으로만 예측해도 Accuracy 98%가 나와 평가 지표로 의미가 없었습니다. ROC-AUC도 정상 기업을 잘 맞히는 비율이 함께 반영돼 점수가 부풀려졌습니다. 반면 PR-AUC는 Precision·Recall만으로 계산되어 다수 클래스 예측 성능과 무관하게 부도 탐지력만 보여준다는 것을 실험을 통해 배웠고, 이를 핵심 평가 지표로 삼았습니다.<br/><br/>또한 Recall을 높이기 위해 임계값을 낮추면 FP가 폭증해 Precision이 5%대까지 떨어지는 문제가 있었습니다. "부도 기업을 놓치지 않겠다"는 목표와 "오탐이 너무 많다"는 현실 사이에서 어느 쪽을 우선할지 직접 판단해야 했습니다. 최종 임계값 0.0856은 FN 비용이 FP보다 훨씬 크다는 비용 구조에 맞게 설계된 운영 기준입니다.</p>
 </div>
 <div class="stack-col">
 <div class="card">
