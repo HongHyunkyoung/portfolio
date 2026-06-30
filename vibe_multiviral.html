@@ -498,7 +498,7 @@
   <section class="project-section" id="vibe-multiviral">
   <div class="container">
     <div class="back-row">
-      <a class="back-link" href="index.html">← 포트폴리오로 돌아가기</a>
+      <a class="back-link" href="index2.html">← 포트폴리오로 돌아가기</a>
     </div>
 
     <div class="eyebrow">VIBE CODING · CMUX × AIM 해커톤</div>
@@ -587,6 +587,44 @@
       </div>
     </div>
 
+    <!-- 배운 점 & 개선 방향 -->
+    <div class="section lessons-section">
+      <div class="section-head">
+        <span class="section-kicker">Challenges & Lessons</span>
+        <h2>개선한 것과 배운 것</h2>
+      </div>
+      <div class="two-col">
+        <div class="card">
+          <div class="lesson-list">
+            <div class="lesson-item">
+              <strong>로컬에서는 되는데 배포하면 안 되는 문제</strong>
+              <p>YouTube 자막 추출이 로컬에서는 잘 됐는데, Vercel 배포 환경에서는 IP 차단으로 막혔습니다. 로컬과 배포 환경이 다르다는 것을 처음 경험했고, RapidAPI를 중간 레이어로 활용해 우회하는 방식으로 해결했습니다.</p>
+            </div>
+            <div class="lesson-item">
+              <strong>프롬프트가 곧 비즈니스 로직이었다</strong>
+              <p>LinkedIn은 체류 시간, X는 북마크, Instagram은 첫 125자가 핵심이라는 플랫폼별 알고리즘을 프롬프트에 직접 녹였습니다. 각 플랫폼에 맞는 글이 나오는 걸 보면서 프롬프트 설계가 곧 서비스 기획이라는 걸 실감했습니다.</p>
+            </div>
+            <div class="lesson-item">
+              <strong>Gemini API Rate Limit(429) 오류 대응</strong>
+              <p>API 호출이 집중될 때 429 오류가 발생했습니다. 폴백 로직을 추가해 대응했고, 외부 API에 의존하는 서비스는 항상 한도 초과 상황을 고려해야 한다는 것을 배웠습니다.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="lesson-list">
+            <div class="lesson-item">
+              <strong>한계 — 긴 영상은 내용 반영이 부정확함</strong>
+              <p>영상이 길수록 자막 전체를 처리하기 어려워 핵심 내용이 누락되거나 부정확하게 반영됐습니다. 토큰 한계로 인해 긴 콘텐츠를 온전히 다루는 데 한계가 있었습니다.</p>
+            </div>
+            <div class="lesson-item">
+              <strong>한계 — 자막 없는 영상과 Viral Score 검증</strong>
+              <p>자막이 없는 영상은 처리 자체가 불가능했습니다. Viral Score도 AI가 스스로 생성한 글을 스스로 채점하는 구조라 실제 인게이지먼트와의 상관관계는 검증되지 않았습니다. 숫자가 있다고 의미 있는 지표가 되는 건 아니라는 걸 배웠습니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- 프롬프트 체이닝 파이프라인 -->
     <div class="section">
       <div class="section-head">
@@ -653,50 +691,6 @@
       </div>
     </div>
 
-    <!-- 배운 점 & 개선 방향 -->
-    <div class="section lessons-section">
-      <div class="section-head">
-        <span class="section-kicker">Limitations & Lessons</span>
-        <h2>한계와 배운 점</h2>
-      </div>
-      <div class="two-col">
-        <div class="card">
-          <h3 style="color:#fbbf24; margin-bottom: 18px;">⚠️ 현재 모델의 한계</h3>
-          <div class="lesson-list">
-            <div class="lesson-item">
-              <strong>프롬프트 의존적 품질 불안정</strong>
-              <p>같은 URL을 넣어도 viral_score나 포스트 톤이 매번 다르게 나올 수 있고, 이를 제어할 메커니즘이 없습니다.</p>
-            </div>
-            <div class="lesson-item">
-              <strong>단방향 콘텐츠 타입 지원</strong>
-              <p>YouTube 자막과 블로그 본문만 처리 가능합니다. 자막이 없는 영상, 로그인이 필요한 페이지 등 실제 유저가 넣을 법한 URL의 상당수는 오류로 떨어집니다.</p>
-            </div>
-            <div class="lesson-item">
-              <strong>바이럴 스코어의 허구성</strong>
-              <p>LLM이 스스로 생성한 포스트를 스스로 채점하는 구조입니다. 실제 인게이지먼트 데이터 없이 자기 평가하는 수치라 신뢰 근거가 없습니다.</p>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <h3 style="color:#2dd4bf; margin-bottom: 18px;">💡 개선 방향과 배운 점</h3>
-          <div class="lesson-list">
-            <div class="lesson-item">
-              <strong>개선 방향</strong>
-              <p>Few-shot 예시 포스트를 프롬프트에 삽입해 출력 품질 편차를 줄이는 방법, 실제 LinkedIn/X API로 게시 후 조회수를 역피드백하는 검증 루프 추가가 가능합니다.</p>
-            </div>
-            <div class="lesson-item">
-              <strong>그럼에도 의미 있는 이유</strong>
-              <p>3단계 프롬프트 체이닝과 병렬 실행 구조를 직접 구현했고, 해커톤 당일 URL 입력부터 UI 출력까지 동작하는 End-to-End 파이프라인을 완성했습니다.</p>
-            </div>
-            <div class="lesson-item">
-              <strong>배운 것</strong>
-              <p>프롬프트 설계가 곧 비즈니스 로직이라는 것을 체감했습니다. 로컬과 배포 환경은 다르다는 것을 직접 겪었고, IP 차단 우회 방법으로 RapidAPI 같은 중간 레이어를 활용하는 선택지가 있다는 것도 배웠습니다.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
     <!-- 기술 스택 -->
     <div class="section">
       <div class="section-head">
@@ -717,7 +711,7 @@
         <strong>Links</strong>
         <div class="source-links">
           <a href="https://multi-viral.vercel.app" target="_blank" rel="noopener">multi-viral.vercel.app →</a>
-          <a href="index.html#vibe">← 바이브 코딩 섹션</a>
+          <a href="index2.html#vibe">← 바이브 코딩 섹션</a>
         </div>
       </div>
     </footer>
